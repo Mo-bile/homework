@@ -75,10 +75,13 @@
             })
         }
         function save_comment(){
+            let nick = $('#nick').val()
+            let reple = $('#reple').val()
+
             $.ajax({
                 type: 'POST',
                 url: '/homework',
-                data: {sample_give:'데이터전송'},
+                data: {nick_give : nick, reple_give :reple},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -91,7 +94,27 @@
                 url: "/homework",
                 data: {},
                 success: function (response) {
-                    alert(response["msg"])
+                    console.log('you',response)
+
+                    let rows = response['reple']
+                    for (let i = 0 ; i<rows.length;i++){
+                        let nick = rows[i]['nick']
+                        let reple = rows[i]['reple']
+
+                        console.log(nick,reple)
+
+                        let temp_html = `<div class="card">
+                                        <div class="card-body">
+                                            <blockquote class="blockquote mb-0">
+                                                <p>${reple}</p>
+                                                <footer class="blockquote-footer">${nick}</footer>
+                                            </blockquote>
+                                        </div>
+                                       </div>`
+
+                        $('#reple-list').append(temp_html)
+
+                    }
                 }
             });
         }
@@ -104,17 +127,19 @@
     </div>
     <div class="mypost">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" placeholder="url">
+            <input type="text" class="form-control" id="nick" placeholder="url">
             <label for="floatingInput">닉네임</label>
+
         </div>
         <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+            <textarea class="form-control" placeholder="Leave a comment here" id="reple"
                 style="height: 100px"></textarea>
             <label for="floatingTextarea2">응원댓글</label>
+
         </div>
         <button onclick="save_comment()" type="button" class="btn btn-dark">응원 남기기</button>
     </div>
-    <div class="mycards" id="comment-list">
+    <div class="mycards" id="reple-list">
         <div class="card">
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
